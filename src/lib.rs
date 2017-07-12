@@ -25,7 +25,7 @@ impl Temperature {
     pub fn to_celsius(self) -> Temperature {
         match self {
             Kelvin(k) => Celsius(k - 273.15),
-            c@Celsius(_) => c,
+            c @ Celsius(_) => c,
             Fahrenheit(f) =>Celsius( (f-32.0) * (5.0/9.0) ),
         }
     }
@@ -35,14 +35,14 @@ impl Temperature {
         match self {
             Kelvin(k) =>  Fahrenheit( (k * (9.0/5.0)) - 459.67 ),
             Celsius(c) => Fahrenheit( (c * (9.0/5.0)) + 32.0 ),
-            f@Fahrenheit(_) => f,
+            f @ Fahrenheit(_) => f,
         }
     }
 
     /// Convert whatever Temperature unit there is into Kelvin
     pub fn to_kelvin(self) -> Temperature {
         match self {
-            k@Kelvin(_) => k,
+            k @ Kelvin(_) => k,
             Celsius(c) => Kelvin(c + 273.15),
             Fahrenheit(f) => Kelvin( (f + 459.67) * (5.0/9.0) ),
         }
@@ -57,19 +57,19 @@ impl Add for Temperature {
     /// The RHS will be converted into the unit on the left.
     fn add(self, rhs: Temperature) -> Self::Output {
         match (self, rhs) {
-            (Celsius(a), b@_) => {
+            (Celsius(a), b @ _) => {
                 match b.to_celsius() {
                     Celsius(b) => Celsius(a + b),
                     _ => unreachable!(),
                 }
             },
-            (Fahrenheit(a), b@_) => {
+            (Fahrenheit(a), b @ _) => {
                 match b.to_fahrenheit() {
                     Fahrenheit(b) => Fahrenheit(a + b),
                     _ => unreachable!(),
                 }
             },
-            (Kelvin(a), b@_) => {
+            (Kelvin(a), b @ _) => {
                 match b.to_kelvin() {
                     Kelvin(b) => Kelvin(a + b),
                     _ => unreachable!(),
